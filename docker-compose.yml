@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  catalogservice:
+    image: abayomiganiy/catalogservice
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/usr/src/app
