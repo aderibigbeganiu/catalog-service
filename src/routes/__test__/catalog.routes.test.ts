@@ -1,7 +1,7 @@
 import request from 'supertest'
 import express from 'express'
 import { faker } from '@faker-js/faker'
-import catalogRoutes, { catalogService } from '../catalog.routes'
+import catalogRoutes, { catalogInteractor } from '../catalog.routes'
 import { ProductFactory } from '../../utils/Fixtures'
 
 const app = express()
@@ -23,7 +23,7 @@ describe("Catalog routes", () => {
         test("should create product successfully", async () => {
             const requestBody = mockRequest();
             const product = ProductFactory.build();
-            jest.spyOn(catalogService, "createProduct")
+            jest.spyOn(catalogInteractor, "createProduct")
                 .mockImplementationOnce(() => Promise.resolve(product))
             const response = await request(app)
                 .post('/products')
@@ -45,7 +45,7 @@ describe("Catalog routes", () => {
 
         test("should response with an internal error code 500", async () => {
             const requestBody = mockRequest();
-            jest.spyOn(catalogService, "createProduct")
+            jest.spyOn(catalogInteractor, "createProduct")
                 .mockImplementationOnce(() => Promise.reject(new Error("unable to create product")));
             const response = await request(app)
                 .post('/products')
@@ -67,7 +67,7 @@ describe("Catalog routes", () => {
                 price: product.price,
                 stock: product.stock + 10,
             }
-            jest.spyOn(catalogService, "updateProduct")
+            jest.spyOn(catalogInteractor, "updateProduct")
                 .mockImplementationOnce(() => Promise.resolve(product))
             const response = await request(app)
                 .patch(`/products/${product.id}`)
@@ -96,7 +96,7 @@ describe("Catalog routes", () => {
         test("should response with an internal error code 500", async () => {
             const product = ProductFactory.build();
             const requestBody = mockRequest();
-            jest.spyOn(catalogService, "updateProduct")
+            jest.spyOn(catalogInteractor, "updateProduct")
                 .mockImplementationOnce(() => Promise.reject(new Error("product does not exist")));
             const response = await request(app)
                 .patch(`/products/${product.id}`)
@@ -115,7 +115,7 @@ describe("Catalog routes", () => {
             const randomLimit = faker.number.int({ min: 10, max: 50 })
             const products = ProductFactory.buildList(randomLimit)
 
-            jest.spyOn(catalogService, "getProducts")
+            jest.spyOn(catalogInteractor, "getProducts")
                 .mockImplementationOnce(() => Promise.resolve(products))
             const response = await request(app)
                 .get(`/products?limit=${randomLimit}&offset=0`)
@@ -125,7 +125,7 @@ describe("Catalog routes", () => {
         });
 
         test("should response with an internal error code 500", async () => {
-            jest.spyOn(catalogService, "getProducts")
+            jest.spyOn(catalogInteractor, "getProducts")
                 .mockImplementationOnce(() => Promise.reject(new Error("unable to get products")));
             const response = await request(app)
                 .get(`/products`)
@@ -139,7 +139,7 @@ describe("Catalog routes", () => {
 
         test("should return a product by id", async () => {
             const product = ProductFactory.build();
-            jest.spyOn(catalogService, "getProduct")
+            jest.spyOn(catalogInteractor, "getProduct")
                 .mockImplementationOnce(() => Promise.resolve(product))
             const response = await request(app)
                 .get(`/products/${product.id}`)
@@ -150,7 +150,7 @@ describe("Catalog routes", () => {
 
         test("should response with product not found error 404", async () => {
             const product = ProductFactory.build();
-            jest.spyOn(catalogService, "getProduct")
+            jest.spyOn(catalogInteractor, "getProduct")
                 .mockImplementationOnce(() => Promise.reject(new Error("product not found")));
             const response = await request(app)
                 .get(`/products/${product.id}`)
@@ -161,7 +161,7 @@ describe("Catalog routes", () => {
 
         test("should response with an internal error code 500", async () => {
             const product = ProductFactory.build();
-            jest.spyOn(catalogService, "getProduct")
+            jest.spyOn(catalogInteractor, "getProduct")
                 .mockImplementationOnce(() => Promise.reject(new Error("product does not exist")));
             const response = await request(app)
                 .get(`/products/${product.id}`)
@@ -176,7 +176,7 @@ describe("Catalog routes", () => {
 
         test("should delete a product by id", async () => {
             const product = ProductFactory.build();
-            jest.spyOn(catalogService, "deleteProduct")
+            jest.spyOn(catalogInteractor, "deleteProduct")
                 .mockImplementationOnce(() => Promise.resolve(product.id!))
             const response = await request(app)
                 .delete(`/products/${product.id}`)
@@ -187,7 +187,7 @@ describe("Catalog routes", () => {
 
         test("should response with product not found error 404", async () => {
             const product = ProductFactory.build();
-            jest.spyOn(catalogService, "deleteProduct")
+            jest.spyOn(catalogInteractor, "deleteProduct")
                 .mockImplementationOnce(() => Promise.reject(new Error("product not found")));
             const response = await request(app)
                 .delete(`/products/${product.id}`)
@@ -198,7 +198,7 @@ describe("Catalog routes", () => {
 
         test("should response with an internal error code 500", async () => {
             const product = ProductFactory.build();
-            jest.spyOn(catalogService, "deleteProduct")
+            jest.spyOn(catalogInteractor, "deleteProduct")
                 .mockImplementationOnce(() => Promise.reject(new Error("product does not exist")));
             const response = await request(app)
                 .delete(`/products/${product.id}`)

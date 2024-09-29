@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { CreateProductRequest, UpdateProductRequest } from "../dto/product.dto";
 import { RequestValidator } from "../utils/requestValidator";
-import { CatalogService } from "../services/catalog.services";
+import { CatalogInteractor } from "../interactors/catalog.interactors";
 
 
 export class CatalogController {
-    private readonly catalogService: CatalogService;
-    constructor(catalogService: CatalogService) {
-        this.catalogService = catalogService;
+    private readonly catalogInteractor: CatalogInteractor;
+    constructor(catalogInteractor: CatalogInteractor) {
+        this.catalogInteractor = catalogInteractor;
     }
 
     async createProduct(req: Request, res: Response) {
@@ -17,7 +17,7 @@ export class CatalogController {
                 res.status(400).json(errors);
                 return;
             }
-            const data = await this.catalogService.createProduct(input);
+            const data = await this.catalogInteractor.createProduct(input);
             res.status(201).json(data);
             return;
         } catch (error) {
@@ -34,7 +34,7 @@ export class CatalogController {
                 res.status(400).json(errors);
                 return;
             }
-            const data = await this.catalogService.updateProduct({ ...input, id: parseInt(req.params.id) });
+            const data = await this.catalogInteractor.updateProduct({ ...input, id: parseInt(req.params.id) });
             res.status(200).json(data);
             return;
         } catch (error) {
@@ -48,7 +48,7 @@ export class CatalogController {
         try {
             const limit = parseInt(req.query.limit as string) || 10;
             const offset = parseInt(req.query.offset as string) || 0;
-            const data = await this.catalogService.getProducts(limit, offset);
+            const data = await this.catalogInteractor.getProducts(limit, offset);
             res.status(200).json(data);
             return;
         } catch (error) {
@@ -60,7 +60,7 @@ export class CatalogController {
 
     async getProductById(req: Request, res: Response) {
         try {
-            const data = await this.catalogService.getProduct(parseInt(req.params.id));
+            const data = await this.catalogInteractor.getProduct(parseInt(req.params.id));
             if (!data.id) {
                 res.status(404).json("product not found");
                 return;
@@ -76,7 +76,7 @@ export class CatalogController {
 
     async deleteProduct(req: Request, res: Response) {
         try {
-            const data = await this.catalogService.deleteProduct(parseInt(req.params.id));
+            const data = await this.catalogInteractor.deleteProduct(parseInt(req.params.id));
             if (!data) {
                 res.status(404).json("product not found");
                 return;

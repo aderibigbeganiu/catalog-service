@@ -1,6 +1,7 @@
+import { ICatalogInteractor } from "../interfaces/ICatalogInteractor";
 import { ICatalogRepository } from "../interfaces/ICatalogRepository";
 
-export class CatalogService {
+export class CatalogInteractor implements ICatalogInteractor {
     private readonly _repository: ICatalogRepository;
     constructor(repository: ICatalogRepository) {
         this._repository = repository;
