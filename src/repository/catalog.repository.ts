@@ -1,6 +1,6 @@
-import { ICatalogRepository } from "../interface/catalogRepository";
-import { Product } from "../models/product.model";
-// import { ProductFactory } from '../utils/Fixtures'
+import { ICatalogRepository } from "../interfaces/ICatalogRepository";
+import { Product } from "../entities/product.entities";
+// import { ProductFactory } from '../utils/Fixtures';
 
 export class CatalogRepository implements ICatalogRepository {
     async create(data: Product): Promise<Product> {

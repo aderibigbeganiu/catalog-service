@@ -1,4 +1,4 @@
-import { Product } from "../models/product.model";
+import { Product } from "../entities/product.entities";
 
 export interface ICatalogRepository {
     create(data: Product): Promise<Product>;

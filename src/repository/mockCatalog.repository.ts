@@ -1,5 +1,5 @@
-import { ICatalogRepository } from "../interface/catalogRepository";
-import { Product } from "../models/product.model";
+import { ICatalogRepository } from "../interfaces/ICatalogRepository";
+import { Product } from "../entities/product.entities";
 
 export class MockCatalogRepository implements ICatalogRepository {
     async create(data: Product): Promise<Product> {
@@ -21,7 +21,7 @@ export class MockCatalogRepository implements ICatalogRepository {
     async find(limit: number, offset: number): Promise<Product[]> {
         return Promise.resolve([]);
     }
-    
+
     async findOne(id: number): Promise<Product> {
         const data = Promise.resolve({} as Product);
         return data;

@@ -1,4 +1,4 @@
-import { ICatalogRepository } from "../interface/catalogRepository";
+import { ICatalogRepository } from "../interfaces/ICatalogRepository";
 
 export class CatalogService {
     private readonly _repository: ICatalogRepository;
@@ -36,7 +36,7 @@ export class CatalogService {
         }
         return data;
     }
-    
+
     async deleteProduct(id: number) {
         const data = await this._repository.delete(id);
         if (!data) {
