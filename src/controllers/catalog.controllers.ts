@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { CreateProductRequest, UpdateProductRequest } from "../dto/product.dto";
 import { RequestValidator } from "../utils/requestValidator";
-import { CatalogInteractor } from "../interactors/catalog.interactors";
+import { CatalogInteractor } from "../useCases/catalog.interactors";
 
 
 export class CatalogController {
@@ -34,7 +34,7 @@ export class CatalogController {
                 res.status(400).json(errors);
                 return;
             }
-            const data = await this.catalogInteractor.updateProduct({ ...input, id: parseInt(req.params.id) });
+            const data = await this.catalogInteractor.updateProduct({ ...input, id: req.params.id });
             res.status(200).json(data);
             return;
         } catch (error) {
@@ -60,7 +60,7 @@ export class CatalogController {
 
     async getProductById(req: Request, res: Response) {
         try {
-            const data = await this.catalogInteractor.getProduct(parseInt(req.params.id));
+            const data = await this.catalogInteractor.getProduct(req.params.id);
             if (!data.id) {
                 res.status(404).json("product not found");
                 return;
@@ -76,7 +76,7 @@ export class CatalogController {
 
     async deleteProduct(req: Request, res: Response) {
         try {
-            const data = await this.catalogInteractor.deleteProduct(parseInt(req.params.id));
+            const data = await this.catalogInteractor.deleteProduct(req.params.id);
             if (!data) {
                 res.status(404).json("product not found");
                 return;

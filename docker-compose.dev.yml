@@ -5,9 +5,9 @@ services:
     image: abayomiganiy/catalogservice
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.dev
     environment:
-      NODE_ENV: production
+      NODE_ENV: development
     ports:
       - 8000:8000
     volumes:

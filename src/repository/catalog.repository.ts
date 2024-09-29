@@ -1,61 +1,40 @@
 import { ICatalogRepository } from "../interfaces/ICatalogRepository";
 import { Product } from "../entities/product.entities";
-// import { ProductFactory } from '../utils/Fixtures';
+import { PrismaClient } from "@prisma/client";
 
 export class CatalogRepository implements ICatalogRepository {
+    prisma: PrismaClient;
+
+    constructor() {
+        this.prisma = new PrismaClient();
+    }
+
     async create(data: Product): Promise<Product> {
-        // const product = ProductFactory.build()
-        const product = {
-            id: 123,
-            name: "Catalog name",
-            description: "Catalog description",
-            price: 123.45,
-            stock: 123
-        }
-        return Promise.resolve(product);
+        return this.prisma.product.create({ data });
     }
     async update(data: Product): Promise<Product> {
-        // const product = ProductFactory.build()
-        const product = {
-            id: 123,
-            name: "Catalog name",
-            description: "Catalog description",
-            price: 123.45,
-            stock: 123
-        }
-        return Promise.resolve(product);
+        const { id, ...updateData } = data;
+        return this.prisma.product.update({
+            where: {
+                id
+            },
+            data: updateData,
+        })
     }
-    async delete(id: number): Promise<number> {
-        // const product = ProductFactory.build()
-        const product = {
-            id: 123,
-            name: "Catalog name",
-            description: "Catalog description",
-            price: 123.45,
-            stock: 123
-        }
-        return Promise.resolve(product.id!);
+    async delete(id: string): Promise<string> {
+        return (await this.prisma.product.delete({ where: { id } })).id;
     }
     async find(limit: number, offset: number): Promise<Product[]> {
-        // const products = ProductFactory.buildList(limit)
-        const products = [{
-            id: 123,
-            name: "Catalog name",
-            description: "Catalog description",
-            price: 123.45,
-            stock: 123
-        }]
-        return Promise.resolve(products);
+        return this.prisma.product.findMany({
+            take: limit,
+            skip: offset,
+        });
     }
-    async findOne(id: number): Promise<Product> {
-        // const product = ProductFactory.build()
-        const product = {
-            id: 123,
-            name: "Catalog name",
-            description: "Catalog description",
-            price: 123.45,
-            stock: 123
+    async findOne(id: string): Promise<Product> {
+        const product = await this.prisma.product.findFirst({ where: { id } });
+        if (!product) {
+            throw new Error("product not found");
         }
-        return Promise.resolve(product);
+        return product;
     }
 }

@@ -30,7 +30,7 @@ export class CatalogInteractor implements ICatalogInteractor {
         return data;
     }
 
-    async getProduct(id: number) {
+    async getProduct(id: string) {
         const data = await this._repository.findOne(id);
         if (!data) {
             throw new Error("product does not exist");
@@ -38,7 +38,7 @@ export class CatalogInteractor implements ICatalogInteractor {
         return data;
     }
 
-    async deleteProduct(id: number) {
+    async deleteProduct(id: string) {
         const data = await this._repository.delete(id);
         if (!data) {
             throw new Error("product does not exist");

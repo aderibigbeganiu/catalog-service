@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { CatalogController } from '../controllers/catalog.controllers';
 import { CatalogRepository } from '../repository/catalog.repository';
-import { CatalogInteractor } from '../interactors/catalog.interactors';
+import { CatalogInteractor } from '../useCases/catalog.interactors';
 
 const router = Router();
 const catalogRepository = new CatalogRepository();
